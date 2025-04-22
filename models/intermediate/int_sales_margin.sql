@@ -1,7 +1,11 @@
 SELECT
+    date_date,
+    orders_id,
     sales.products_id,
+    quantity,
     (purchase_price * quantity) AS purchase_cost,
-    revenue - (purchase_price * quantity) AS margin
+    revenue,
+    ROUND(revenue - (purchase_price * quantity), 2) AS margin
 FROM 
    {{ ref('stg_raw__sales') }} AS sales
 JOIN

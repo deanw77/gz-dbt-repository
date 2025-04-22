@@ -7,7 +7,7 @@ sources:
     tables:
       - name: sales
         identifier: raw_gz_sales
-        description: sales of Greenweez / we have on row per product_id found in each orders_id
+        description: "sales of Greenweez / we have on row per product_id found in each orders_id"
         
         loaded_at_field: "CAST(date_date AS TIMESTAMP)"
         freshness: 
@@ -17,7 +17,7 @@ sources:
         
         columns:
           - name: date_date
-            description: date of purchase
+            description: "date of purchase"
           - name: orders_id
             description: order id of the transaction this product sale was part off
           - name: pdt_id

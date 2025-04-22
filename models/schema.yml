@@ -150,4 +150,3 @@ models:
         description: Total daily logistical costs
       - name: quantity
         description: Total number of items sold each day
-

@@ -10,7 +10,54 @@ sources:
     tables:
       - name: sales
         identifier: raw_gz_sales
+        description: sales of Greenweez / we have on row per product_id found in each orders_id
+        
+        loaded_at_field: "CAST(date_date AS TIMESTAMP)"
+        freshness: 
+          warn_after:
+            count: 90
+            period: day
+        
+        columns:
+          - name: date_date
+            description: date of purchase
+          - name: orders_id
+            description: order id of the transaction this product sale was part off
+          - name: pdt_id
+            description: the products id of each product in each order
+          - name: revenue
+            description: The revuenue from this product sale, in this order
+          - name: quantity
+            description: The quantity of this products sold in this order
+        tests:
+          - unique:
+              column_name: "(orders_id || '-' || pdt_id)"
+          
       - name: product 
         identifier: raw_gz_product 
+        description: products of Greenweez / we have on row per product along with the cost per product
+        columns:
+          - name: products_id
+            description: The unique id for each product
+            tests:
+              - unique
+              - not_null
+          - name: purchSE_PRICE
+            description: The price for each product
       - name: ship
         identifier: raw_gz_ship
+        description: products of Greenweez / we have on row per order along with the shipping & logistal costs for each order
+        columns:
+          - name: orders_id
+            description: The unique id for each order shipped
+            tests:
+              - unique
+              - not_null
+          - name: shipping_fee
+            description: The fee charged for shipping
+          - name: shipping_fee_1
+            description: The fee charged for shipping - Duplicate
+          - name: log_cost
+            description: The logistics costs for each order
+          - name: ship_cost
+            description: The cost to ship each order

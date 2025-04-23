@@ -1,20 +1,20 @@
 # schema.yml
 version: 2
 
-sources: 
-  - name: raw 
+sources:
+  - name: raw
     schema: gz_raw_data
     tables:
       - name: sales
         identifier: raw_gz_sales
         description: "sales of Greenweez / we have on row per product_id found in each orders_id"
-        
+
         loaded_at_field: "CAST(date_date AS TIMESTAMP)"
-        freshness: 
+        freshness:
           warn_after:
             count: 90
             period: day
-        
+
         columns:
           - name: date_date
             description: "date of purchase"
@@ -29,9 +29,9 @@ sources:
         tests:
           - unique:
               column_name: "(orders_id || '-' || pdt_id)"
-          
-      - name: product 
-        identifier: raw_gz_product 
+
+      - name: product
+        identifier: raw_gz_product
         description: products of Greenweez / we have on row per product along with the cost per product
         columns:
           - name: products_id
@@ -60,6 +60,91 @@ sources:
           - name: ship_cost
             description: The cost to ship each order
 
+      - name: adwords
+        identifier: raw_gz_adwords
+        description: Daily Adwords cost
+        columns:
+          - name: date_date
+            description: The date for each row
+            tests:
+              - not_null
+          - name: orders_id
+          - name: paid_source
+            description: The source of the paid traffic
+          - name: campaign_key
+            description: The campaign key for each adwords campaign
+          - name: camPGN_name
+            description: The name of the adwords campaign
+          - name: ads_cost
+            description: The cost of the adwords campaign for each day
+          - name: impressions
+            description: The number of impressions for each adwords campaign for each day
+          - name: click
+            description: The number of clicks for each adwords campaign for each day
+
+      - name: bing
+        identifier: raw_gz_bing
+        description: Daily Bing cost
+        columns:
+          - name: date_date
+            description: The date for each row
+            tests:
+              - not_null
+          - name: paid_source
+            description: The source of the paid traffic
+          - name: campaign_key
+            description: The campaign key for each adwords campaign
+          - name: camPGN_name
+            description: The name of the adwords campaign
+          - name: ads_cost
+            description: The cost of the adwords campaign for each day
+          - name: impressions
+            description: The number of impressions for each adwords campaign for each day
+          - name: click
+            description: The number of clicks for each adwords campaign for each day
+
+      - name: critereo
+        identifier: raw_gz_criteo
+        description: Daily Criteo cost
+        columns:
+          - name: date_date
+            description: The date for each row
+            tests:
+              - not_null
+          - name: paid_source
+            description: The source of the paid traffic
+          - name: campaign_key
+            description: The campaign key for each adwords campaign
+          - name: camPGN_name
+            description: The name of the adwords campaign
+          - name: ads_cost
+            description: The cost of the adwords campaign for each day
+          - name: impressions
+            description: The number of impressions for each adwords campaign for each day
+          - name: click
+            description: The number of clicks for each adwords campaign for each day
+
+      - name: facebook
+        identifier: raw_gz_facebook
+        description: Daily Facebook cost
+        columns:
+          - name: date_date
+            description: The date for each row
+            tests:
+              - not_null
+          - name: paid_source
+            description: The source of the paid traffic
+          - name: campaign_key
+            description: The campaign key for each adwords campaign
+          - name: camPGN_name
+            description: The name of the adwords campaign
+          - name: ads_cost
+            description: The cost of the adwords campaign for each day
+          - name: impressions
+            description: The number of impressions for each adwords campaign for each day
+          - name: click
+            description: The number of clicks for each adwords campaign for each day
+
 models:
   - name: int_orders_margin
     description: Calculate the margin per order
@@ -77,8 +162,8 @@ models:
         description: quantity of items for each order
       - name: purchase_cost,
         description: Purchase Cost for each order
-      - name: margin      
-        description: Profit margin for each order 
+      - name: margin
+        description: Profit margin for each order
 
   - name: int_orders_operational
     description: Calculate the operational margin per order
@@ -96,11 +181,11 @@ models:
         description: The revenue for each order
       - name: purchase_cost,
         description: Purchase Cost for each order
-      - name: margin      
-        description: Profit margin for each order  
-      - name: shipping_fee      
-        description: The shipping fee charged for each order  
-      - name: log_cost      
+      - name: margin
+        description: Profit margin for each order
+      - name: shipping_fee
+        description: The shipping fee charged for each order
+      - name: log_cost
         description: The logistical costs for each order
 
   - name: int_sales_margin
@@ -118,11 +203,46 @@ models:
         description: Purchase Cost for each order
       - name: revenue
         description: The revenue for each order
-      - name: margin      
-        description: Profit margin for each order 
+      - name: margin
+        description: Profit margin for each order
     tests:
       - unique:
           column_name: "(orders_id || '-' || products_id)"
+
+  - name: int_campaigns
+    description: Calculate the cost per campaign per day
+    columns:
+      - name: date_date
+        description: The date for each row
+        tests:
+          - not_null
+      - name: paid_source
+        description: The source of the paid traffic
+      - name: campaign_key
+        description: The campaign key for each adwords campaign
+      - name: camPGN_name
+        description: The name of the adwords campaign
+      - name: ads_cost
+        description: The cost of the adwords campaign for each day
+      - name: impressions
+        description: The number of impressions for each adwords campaign for each day
+      - name: click
+        description: The number of clicks for each adwords campaign for each day
+
+  - name: int_campaigns_days
+    description: Calculate the cost per campaign per day
+    columns:
+      - name: date_date
+        description: The date for each row
+        tests:
+          - not_null
+          - unique
+      - name: ads_cost
+        description: Daily ads cost
+      - name: impression
+        description: The number of impressions for all campaigns for each day
+      - name: click
+        description: The number of clicks for all campaigns for each day
 
   - name: finance_days
     description: An aggregation of the data providing daily statistics
@@ -131,7 +251,7 @@ models:
         description: The date for each row
         tests:
           - unique
-          - not_null         
+          - not_null
       - name: nb_transactions
         description: The number of daily transactions
       - name: revenue

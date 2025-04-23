@@ -270,3 +270,38 @@ models:
         description: Total daily logistical costs
       - name: quantity
         description: Total number of items sold each day
+
+  - name: finance_campaigns_day
+    description: An aggregation of the data providing daily statistics per day
+    columns:
+      - name: date_date
+        description: The date for each row
+        tests:
+          - unique
+          - not_null
+      - name: ads_margin
+        description: Daily ads margin
+      - name: average_basket
+        description: Average basket value
+      - name: operational_margin
+        description: Daily operational_margin
+      - name: ads_cost
+        description: Daily ads cost
+      - name: impressions
+        description: Daily impressions
+      - name: click
+        description: Daily clicks
+      - name: quantity
+        description: Total number of items sold each day
+      - name: revenue
+        description: Daily revenue
+      - name: purchase_cost 
+        description: Total daily purchase costs
+      - name: margin  
+        description: Daily profit margin
+      - name: shipping_fee
+        description: Total daily shipping fees
+      - name: log_cost
+        description: Total daily logistical costs
+      - name: ship_cost
+        description: Total daily shipping costs

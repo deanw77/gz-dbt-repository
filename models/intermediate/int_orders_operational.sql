@@ -7,7 +7,8 @@ SELECT
     SUM(purchase_cost) AS purchase_cost,
     SUM(margin) AS margin,
     SUM(shipping_fee) AS shipping_fee,
-    SUM(logcost) AS log_cost
+    SUM(logcost) AS log_cost,
+    SUM(ship_cost) AS ship_cost
 FROM
     {{ ref('int_orders_margin') }} AS orders
 JOIN

@@ -8,6 +8,7 @@ SELECT
     ROUND(SUM(purchase_cost), 2) AS purchase_cost,
     ROUND(SUM(shipping_fee), 2) AS shipping_fee,
     ROUND(SUM(log_cost), 2) AS log_cost,
+    ROUND(SUM(ship_cost), 2) AS ship_cost,
     SUM(quantity) AS quantity
 FROM
     {{ ref('int_orders_operational') }}
